@@ -121,6 +121,16 @@ async function base64LoginResponse(requestInfo: any = {}, entity: any, user: any
       AuthnStatement: '',
       AttributeStatement: '',
     };
+
+    // Allows usage of AuthnStatement
+    if (idpSetting.loginResponseTemplate && idpSetting.loginResponseTemplate.AuthnStatement) {
+      if (idpSetting.loginResponseTemplate.AuthnStatement.tags) {
+        tvalue.AuthnStatement = libsaml.replaceTagsByValue(idpSetting.loginResponseTemplate.AuthnStatement.content, idpSetting.loginResponseTemplate.AuthnStatement.tags.get());
+      } else {
+        tvalue.AuthnStatement = idpSetting.loginResponseTemplate.AuthnStatement.content;
+      }
+    }
+
     if (idpSetting.loginResponseTemplate && customTagReplacement) {
       const template = customTagReplacement(idpSetting.loginResponseTemplate.context);
       rawSamlResponse = get(template, 'context', null);

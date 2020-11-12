@@ -49,6 +49,15 @@ export interface ExtractorResult {
   notexist?: boolean;
 }
 
+export interface AuthnStatementTags {
+  get(): Record<string, string>;
+}
+
+export interface AuthnStatementAttribute {
+  content: string;
+  tags: AuthnStatementTags;
+}
+
 export interface LoginResponseAttribute {
   name: string;
   nameFormat: string; //
@@ -64,6 +73,7 @@ export interface BaseSamlTemplate {
 
 export interface LoginResponseTemplate extends BaseSamlTemplate {
   attributes?: LoginResponseAttribute[];
+  AuthnStatement?: AuthnStatementAttribute;
 }
 export interface LoginRequestTemplate extends BaseSamlTemplate { }
 
