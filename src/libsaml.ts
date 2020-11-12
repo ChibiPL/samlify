@@ -273,7 +273,7 @@ const libSaml = () => {
       if (referenceTagXPath) {
         sig.addReference(
           referenceTagXPath,
-          opts.transformationAlgorithms,
+          transformationAlgorithms,
           getDigestMethod(signatureAlgorithm)
         );
       }
