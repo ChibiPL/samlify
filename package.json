@@ -12,12 +12,13 @@
   ],
   "typings": "types/index.d.ts",
   "scripts": {
-    "build": "yarn audit;make rebuild",
+    "build": "npm run clean && npm audit && tsc",
+    "clean": "del-cli ./build --force",
     "docs": "docsify serve -o docs",
     "lint": "tslint -p .",
     "lint:fix": "tslint -p . --fix",
-    "pretest": "make pretest",
-    "test": "NODE_ENV=test nyc ava",
+    "pretest": "mkdirp build/test && copyfiles test/key build/test && copyfiles test/misc build/test",
+    "test": "cross-env NODE_ENV=test nyc ava",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "hooks:postinstall": "ln -sf $PWD/.pre-commit.sh $PWD/.git/hooks/pre-commit"
   },
@@ -55,7 +56,11 @@
     "timekeeper": "^2.2.0",
     "ts-node": "^8.3.0",
     "tslint": "^6.1.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "del-cli": "^3.0.1",
+    "mkdirp": "^1.0.4",
+    "copyfiles": "^2.4.0",
+    "cross-env": "^7.0.2"
   },
   "ava": {
     "extensions": [
