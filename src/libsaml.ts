@@ -388,7 +388,7 @@ const libSaml = () => {
 
           }
 
-        } 
+        }
 
         sig.loadSignature(signatureNode);
 
@@ -504,7 +504,7 @@ const libSaml = () => {
       const signCert = metadata.getX509Certificate(certUse.signing);
       const signingScheme = getSigningScheme(verifyAlgorithm);
       const key = new nrsa(utility.getPublicKeyPemFromCertificate(signCert), { signingScheme });
-      return key.verify(new Buffer(octetString), signature);
+      return key.verify(Buffer.from(octetString), signature);
     },
     /**
     * @desc Get the public key in string format
