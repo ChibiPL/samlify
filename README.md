@@ -87,3 +87,50 @@ See full documentation [here](https://samlify.js.org/)
 ### Copyright
 
 Copyright (C) 2016-present Tony Ngan, released under the MIT License.
+
+
+### Added in this version
+When initiating iDp you can provide some additional template parameters that allows library to be used with Tableu
+
+```
+loginResponseTemplate: {
+       context: '',  // use default
+       attributes: [ // attributes for template in binding-post, used as AttributeStatement. Uses attributeStatementBuilder from libsaml
+         Object.assign({}, attributeFormat, {name: 'username', valueTag: 'UserEmail'}),
+         Object.assign({}, attributeFormat, {name: 'fullName', valueTag: 'UserFirstName} {UserLastName'}),
+         Object.assign({}, attributeFormat, {name: 'firstName', valueTag: 'UserFirstname'}),
+         Object.assign({}, attributeFormat, {name: 'lastName', valueTag: 'UserLastname'}),
+         Object.assign({}, attributeFormat, {name: 'email', valueTag: 'UserEmail'}),
+         Object.assign({}, attributeFormat, {name: 'mobilePhone', valueTag: 'UserMobilePhone'}),
+       ],
+       AuthnStatement: { // this is for setting AuthnStatement for binding-post
+         content: '<saml:AuthnStatement AuthnInstant="{now}" SessionNotOnOrAfter="{tenHoursLater}" SessionIndex="_asdgerw3w3g43"><saml:AuthnContext><saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef></saml:AuthnContext></saml:AuthnStatement>',
+         tags: { // tags can be any object with get. that need to return object with keys, they are used as tags only for AuthnStatement template! 
+           get() {
+             const n = new Date();
+             const tn = new Date(n.getTime());
+             const nn = tn.setHours(n.getHours() + 10);
+             return {
+               now: n.toISOString(),
+               tenHoursLater: tn.toISOString(),
+             };
+           }
+         }
+       }
+     }
+
+
+
+------
+const attributeFormat = {
+  nameFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+  valueXsiType: 'xs:string',
+  valueXmlnsXs: 'http://www.w3.org/2001/XMLSchema',
+  valueXmlnsXsi: 'http://www.w3.org/2001/XMLSchema-instance',
+};
+```
+
+### Change Authors
+ * Andrei Popescu - made changes in build .js files for this work with tableu requirements
+ * Artur (Seti) Łabudziński - implemented those changes into .ts files
+
