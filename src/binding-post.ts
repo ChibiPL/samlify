@@ -129,10 +129,19 @@ async function base64LoginResponse(requestInfo: any = {}, entity: any, user: any
       } else {
         tvalue.AuthnStatement = idpSetting.loginResponseTemplate.AuthnStatement.content;
       }
+
+      if (idpSetting.loginResponseTemplate.attributes instanceof Array) {
+        tvalue.AttributeStatement = libsaml.attributeStatementBuilder(idpSetting.loginResponseTemplate.attributes);
+      }
     }
 
     if (idpSetting.loginResponseTemplate && customTagReplacement) {
-      const template = customTagReplacement(idpSetting.loginResponseTemplate.context);
+      let template;
+      if (idpSetting.loginResponseTemplate.context !== '') {
+        template = customTagReplacement(idpSetting.loginResponseTemplate.context);
+      } else {
+        template = customTagReplacement(libsaml.replaceTagsByValue(libsaml.defaultLoginResponseTemplate.context, tvalue));
+      }
       rawSamlResponse = get(template, 'context', null);
     } else {
       if (requestInfo !== null) {
