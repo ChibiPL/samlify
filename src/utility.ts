@@ -15,7 +15,7 @@ const BASE64_STR = 'base64';
  */
 export function zipObject(arr1: string[], arr2: any[], skipDuplicated = true) {
   return arr1.reduce((res, l, i) => {
-    
+
     if (skipDuplicated) {
       res[l] = arr2[i];
       return res;
@@ -61,19 +61,19 @@ export function uniq(input: string[]) {
   return [... set];
 }
 /**
- * @desc Alternative to lodash.get 
+ * @desc Alternative to lodash.get
  * @reference https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_get
- * @param obj 
- * @param path 
- * @param defaultValue 
+ * @param obj
+ * @param path
+ * @param defaultValue
  */
 export function get(obj, path, defaultValue) {
   return path.split('.')
   .reduce((a, c) => (a && a[c] ? a[c] : (defaultValue || null)), obj);
 }
 /**
- * @desc Check if the input is string 
- * @param {any} input 
+ * @desc Check if the input is string
+ * @param {any} input
  */
 export function isString(input: any) {
   return typeof input === 'string';
@@ -113,7 +113,7 @@ function deflateString(message: string): number[] {
 export function inflateString(compressedString: string): string {
   const inputBuffer = Buffer.from(compressedString, BASE64_STR);
   const input = Array.prototype.map.call(inputBuffer.toString('binary'), char => char.charCodeAt(0));
-  return Array.from(inflate(input, { raw: true }))
+  return Array.from((inflate(input, { raw: true }) as any) as number[]) // this convertion is for some reason needed by projects using the library
     .map(byte => String.fromCharCode(byte))
     .join('');
 }
