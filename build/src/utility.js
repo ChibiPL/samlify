@@ -139,7 +139,7 @@ function deflateString(message) {
 function inflateString(compressedString) {
     var inputBuffer = Buffer.from(compressedString, BASE64_STR);
     var input = Array.prototype.map.call(inputBuffer.toString('binary'), function (char) { return char.charCodeAt(0); });
-    return Array.from(pako_1.inflate(input, { raw: true }))
+    return Array.from(pako_1.inflate(input, { raw: true })) // this convertion is for some reason needed by projects using the library
         .map(function (byte) { return String.fromCharCode(byte); })
         .join('');
 }
